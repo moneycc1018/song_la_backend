@@ -14,4 +14,4 @@ class KkboxInfo(BaseModel):
     album_id: str
     album_name: str
     release_date: str | None
-    tags: Json
+    tags: list[int] | None

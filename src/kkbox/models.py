@@ -1,9 +1,11 @@
+from pydantic import Json
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 from sqlalchemy.dialects.postgresql import VARCHAR, JSONB
 
 
 class Base(DeclarativeBase):
-    pass
+    def as_dict(self):
+        return {e.name: getattr(self, e.name) for e in self.__table__.columns}
 
 
 class KkboxInfo(Base):
@@ -15,5 +17,5 @@ class KkboxInfo(Base):
     artist_name: Mapped[str] = mapped_column(VARCHAR(length=255))
     album_id: Mapped[str] = mapped_column(VARCHAR(length=50))
     album_name: Mapped[str] = mapped_column(VARCHAR(length=255))
-    relase_date: Mapped[str] = mapped_column(VARCHAR(length=50), nullable=True)
-    tags: Mapped[dict] = mapped_column(JSONB, nullable=True)
+    release_date: Mapped[str] = mapped_column(VARCHAR(length=50), nullable=True)
+    tags: Mapped[list[int]] = mapped_column(JSONB, nullable=True)
