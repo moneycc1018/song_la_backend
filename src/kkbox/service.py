@@ -1,17 +1,7 @@
 from sqlalchemy import select
-from src.database import fetch_all, fetch_model_all
-from src.kkbox.schemas import ArtistInfo, KkboxInfo
+from src.database import fetch_model_all
+from src.kkbox.schemas import KkboxInfo
 from src.kkbox.models import KkboxInfo as KkboxInfoModel
-
-
-def query_all_artists() -> list[ArtistInfo] | None:
-    stmt = (
-        select(KkboxInfoModel.artist_id, KkboxInfoModel.artist_name)
-        .group_by(KkboxInfoModel.artist_id)
-        .group_by(KkboxInfoModel.artist_name)
-    )
-
-    return fetch_all(stmt)
 
 
 def query_info_by_id(column, value) -> list[KkboxInfo] | None:

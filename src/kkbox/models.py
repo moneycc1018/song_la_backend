@@ -18,4 +18,4 @@ class KkboxInfo(Base):
     album_id: Mapped[str] = mapped_column(VARCHAR(length=50))
     album_name: Mapped[str] = mapped_column(VARCHAR(length=255))
     release_date: Mapped[str] = mapped_column(VARCHAR(length=50), nullable=True)
-    tags: Mapped[list[int]] = mapped_column(JSONB, nullable=True)
+    tags: Mapped[Json] = mapped_column(JSONB, nullable=True)
