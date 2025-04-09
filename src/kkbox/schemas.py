@@ -10,3 +10,20 @@ class KkboxInfo(BaseModel):
     album_name: str
     release_date: str | None
     tags: Json | None
+
+
+class Kkbox(BaseModel):
+    track_id: str
+    track_name: str
+    artist_id: str
+    artist_name: str
+    album_id: str
+    album_name: str
+    release_date: str | None
+
+
+class KkboxQueryInput(BaseModel):
+    value: str
+    type: str
+    territory: str
+    limit: int

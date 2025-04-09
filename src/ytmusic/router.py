@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Query
+from fastapi import APIRouter
 
 from src.ytmusic.schemas import YtmusicInfo
 from src.ytmusic.service import query_info_by_id
