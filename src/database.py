@@ -1,4 +1,4 @@
-from sqlalchemy import create_engine, Select, Insert, Update, CursorResult
+from sqlalchemy import Delete, create_engine, Select, Insert, Update, CursorResult
 from sqlalchemy.orm import sessionmaker
 from typing import Any
 from src import config
@@ -21,7 +21,7 @@ def fetch_all(query: Select) -> list[dict[str, Any]]:
 
 
 # 查詢整個 model
-def fetch_model_all(query: Select) -> list[dict[str, Any]]:
+def crud_model_all(query: Select | Insert | Update | Delete) -> list[dict[str, Any]]:
     with Session.begin() as session:
         result: CursorResult = session.scalars(query)
         return [r.as_dict() for r in result.all()]

@@ -1,10 +1,10 @@
 import http.client
 import json
 from urllib.parse import urlencode
-from sqlalchemy import select
+from sqlalchemy import insert, select, delete
 from src import config
-from src.database import fetch_model_all
-from src.kkbox.schemas import Kkbox, KkboxInfo, KkboxQueryInput
+from src.database import crud_model_all
+from src.kkbox.schemas import Kkbox, KkboxInfo, KkboxInfoInput
 from src.kkbox.models import KkboxInfo as KkboxInfoModel
 from kkbox_developer_sdk.auth_flow import KKBOXOAuth
 
@@ -17,7 +17,38 @@ def query_info_by_id(column, value) -> list[KkboxInfo] | None:
     elif column == "track_id":
         stmt = select(KkboxInfoModel).where(KkboxInfoModel.track_id.in_(value_list))
 
-    return fetch_model_all(stmt)
+    return crud_model_all(stmt)
+
+
+def insert_info(input: list[KkboxInfoInput]) -> list[KkboxInfo]:
+    input_list = list()
+    for data in input:
+        input_dict = dict()
+        input_dict["track_id"] = data.track_id
+        input_dict["track_name"] = data.track_name
+        input_dict["artist_id"] = data.artist_id
+        input_dict["artist_name"] = data.artist_name
+        input_dict["album_id"] = data.album_id
+        input_dict["album_name"] = data.album_name
+        input_dict["release_date"] = data.release_date
+
+        input_list.append(input_dict)
+
+    stmt = insert(KkboxInfoModel).values(input_list).returning(KkboxInfoModel)
+
+    return crud_model_all(stmt)
+
+
+def delete_info_by_id(value) -> list[KkboxInfo]:
+    value_list = value.split("!@!")
+
+    stmt = (
+        delete(KkboxInfoModel)
+        .where(KkboxInfoModel.track_id.in_(value_list))
+        .returning(KkboxInfoModel)
+    )
+
+    return crud_model_all(stmt)
 
 
 def get_token():
@@ -29,7 +60,9 @@ def get_token():
     return token
 
 
-def query_kkbox(value: str, type: str, terr: str, limit: int) -> list[Kkbox] | None:
+def query_by_kkbox_api(
+    value: str, type: str, terr: str, limit: int
+) -> list[Kkbox] | None:
     try:
         conn = http.client.HTTPSConnection("api.kkbox.com")
         token = get_token()
