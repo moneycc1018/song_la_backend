@@ -1,7 +1,12 @@
 from fastapi import APIRouter
 
-from src.ytmusic.schemas import YtmusicInfo, Ytmusic
-from src.ytmusic.service import query_by_ytmusic_api, query_info_by_id
+from src.ytmusic.schemas import YtmusicInfo, Ytmusic, YtmusicInfoInput
+from src.ytmusic.service import (
+    delete_info_by_id,
+    insert_info,
+    query_by_ytmusic_api,
+    query_info_by_id,
+)
 
 router = APIRouter()
 
@@ -11,10 +16,14 @@ def get_info(column: str, value: str) -> list[YtmusicInfo]:
     return query_info_by_id(column, value)
 
 
-# @router.delete("/info/delete", response_model=list[YtmusicInfo])
-# def delete_info(value: str) -> list[YtmusicInfo]:
+@router.post("/info/add", response_model=list[YtmusicInfo])
+def add_info(input: list[YtmusicInfoInput]) -> list[YtmusicInfo]:
+    return insert_info(input)
 
-#     return delete_info_by_id(value)
+
+@router.delete("/info/delete", response_model=list[YtmusicInfo])
+def delete_info(video_ids_str: str) -> list[YtmusicInfo]:
+    return delete_info_by_id(video_ids_str)
 
 
 @router.get("/api_query", response_model=list[Ytmusic])

@@ -39,12 +39,12 @@ def insert_info(input: list[KkboxInfoInput]) -> list[KkboxInfo]:
     return crud_model_all(stmt)
 
 
-def delete_info_by_id(value) -> list[KkboxInfo]:
-    value_list = value.split("!@!")
+def delete_info_by_id(track_ids_str) -> list[KkboxInfo]:
+    track_id_list = track_ids_str.split("!@!")
 
     stmt = (
         delete(KkboxInfoModel)
-        .where(KkboxInfoModel.track_id.in_(value_list))
+        .where(KkboxInfoModel.track_id.in_(track_id_list))
         .returning(KkboxInfoModel)
     )
 

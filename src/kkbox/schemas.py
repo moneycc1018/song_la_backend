@@ -1,4 +1,4 @@
-from pydantic import BaseModel, Json
+from pydantic import BaseModel
 
 
 class KkboxInfo(BaseModel):
@@ -9,10 +9,10 @@ class KkboxInfo(BaseModel):
     album_id: str
     album_name: str
     release_date: str | None
-    tags: Json | None
+    tags: list[str | None] | None
 
 
-class Kkbox(BaseModel):
+class KkboxInfoInput(BaseModel):
     track_id: str
     track_name: str
     artist_id: str
@@ -22,7 +22,7 @@ class Kkbox(BaseModel):
     release_date: str | None
 
 
-class KkboxInfoInput(BaseModel):
+class Kkbox(BaseModel):
     track_id: str
     track_name: str
     artist_id: str
