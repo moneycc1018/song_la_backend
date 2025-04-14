@@ -9,7 +9,7 @@ class KkboxInfo(BaseModel):
     album_id: str
     album_name: str
     release_date: str | None
-    tags: list[str | None] | None
+    tags: list[int | None] | None
 
 
 class KkboxInfoInput(BaseModel):
@@ -30,3 +30,7 @@ class Kkbox(BaseModel):
     album_id: str
     album_name: str
     release_date: str | None
+
+
+class TagsInput(BaseModel):
+    tags: list[int | None]

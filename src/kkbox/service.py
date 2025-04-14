@@ -1,10 +1,10 @@
 import http.client
 import json
 from urllib.parse import urlencode
-from sqlalchemy import insert, select, delete
+from sqlalchemy import insert, select, delete, update
 from src import config
-from src.database import crud_model_all
-from src.kkbox.schemas import Kkbox, KkboxInfo, KkboxInfoInput
+from src.database import crud_model_all, crud_model_one
+from src.kkbox.schemas import Kkbox, KkboxInfo, KkboxInfoInput, TagsInput
 from src.kkbox.models import KkboxInfo as KkboxInfoModel
 from kkbox_developer_sdk.auth_flow import KKBOXOAuth
 
@@ -49,6 +49,17 @@ def delete_info_by_id(track_ids_str) -> list[KkboxInfo]:
     )
 
     return crud_model_all(stmt)
+
+
+def update_tags_by_id(track_id, input: TagsInput) -> KkboxInfo:
+    stmt = (
+        update(KkboxInfoModel)
+        .where(KkboxInfoModel.track_id == track_id)
+        .values({"tags": input.tags})
+        .returning(KkboxInfoModel)
+    )
+
+    return crud_model_one(stmt)
 
 
 def get_token():

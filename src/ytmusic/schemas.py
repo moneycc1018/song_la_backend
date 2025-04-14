@@ -10,7 +10,7 @@ class YtmusicInfo(BaseModel):
     album_id: str
     album_name: str
     release_year: str | None
-    tags: list[str | None] | None
+    tags: list[int | None] | None
     lyrics_id: str | None
     lyrics: str | None
 
@@ -41,3 +41,7 @@ class Ytmusic(BaseModel):
     lyrics: str | None
 
     artist_name: str  # 呈顯用
+
+
+class TagsInput(BaseModel):
+    tags: list[int | None]

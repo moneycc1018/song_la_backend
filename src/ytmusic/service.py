@@ -1,8 +1,8 @@
-from sqlalchemy import insert, or_, select, delete
+from sqlalchemy import insert, or_, select, delete, update
 from ytmusicapi import YTMusic, OAuthCredentials
 from src import config
-from src.database import crud_model_all
-from src.ytmusic.schemas import YtmusicInfo, YtmusicInfoInput
+from src.database import crud_model_all, crud_model_one
+from src.ytmusic.schemas import TagsInput, YtmusicInfo, YtmusicInfoInput
 from src.ytmusic.models import YtmusicInfo as YtmusicInfoModel
 
 
@@ -21,7 +21,6 @@ def query_info_by_id(column, value) -> list[YtmusicInfo] | None:
 
 def insert_info(input: list[YtmusicInfoInput]) -> list[YtmusicInfo]:
     input_list = list()
-    print(input)
     for data in input:
         input_dict = dict()
         input_dict["video_id"] = data.video_id
@@ -52,6 +51,17 @@ def delete_info_by_id(video_ids_str) -> list[YtmusicInfo]:
     )
 
     return crud_model_all(stmt)
+
+
+def update_tags_by_id(video_id, input: TagsInput) -> YtmusicInfo:
+    stmt = (
+        update(YtmusicInfoModel)
+        .where(YtmusicInfoModel.video_id == video_id)
+        .values({"tags": input.tags})
+        .returning(YtmusicInfoModel)
+    )
+
+    return crud_model_one(stmt)
 
 
 ytmusic = YTMusic(
