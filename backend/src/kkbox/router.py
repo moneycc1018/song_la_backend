@@ -24,7 +24,6 @@ def add_info(input: list[KkboxInfoInput]) -> list[KkboxInfo]:
 
 @router.delete("/info/delete", response_model=list[KkboxInfo])
 def delete_info(track_ids_str: str) -> list[KkboxInfo]:
-
     return delete_info_by_id(track_ids_str)
 
 
